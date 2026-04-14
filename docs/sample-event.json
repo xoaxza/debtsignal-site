@@ -1,0 +1,52 @@
+{
+  "event_id": "evt_8k_0000123456_2026_04_10_001",
+  "issuer": {
+    "name": "Example Holdings, Inc.",
+    "ticker": "EXH",
+    "cik": "0000123456"
+  },
+  "filing": {
+    "form": "8-K",
+    "filed_at": "2026-04-10T20:12:00Z",
+    "accession_number": "0000123456-26-000111",
+    "filing_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+    "items": ["1.01", "2.03", "8.01"]
+  },
+  "event_type": "amendment",
+  "title": "Second amendment extends revolving credit facility maturity",
+  "summary": "The issuer entered into a second amendment to its revolving credit agreement extending maturity and temporarily increasing its maximum net leverage ratio threshold.",
+  "extracted_terms": {
+    "facility_type": "revolving_credit_facility",
+    "maturity_date_old": "2027-06-30",
+    "maturity_date_new": "2029-06-30",
+    "principal_amount_usd": 750000000,
+    "covenant_changes": [
+      "Maximum net leverage ratio increased for fiscal quarters ending June 30, 2026 through December 31, 2026."
+    ],
+    "guarantor_change": null,
+    "default_status": null
+  },
+  "sources": [
+    {
+      "document_type": "8-K",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+      "excerpt": "On April 9, 2026, Example Holdings, Inc. entered into a Second Amendment to its Revolving Credit Agreement."
+    },
+    {
+      "document_type": "Exhibit 10.1",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/ex10-1.htm",
+      "excerpt": "The Revolving Credit Maturity Date is hereby amended to June 30, 2029, and the maximum net leverage ratio shall be increased for specified 2026 quarters."
+    }
+  ],
+  "confidence": {
+    "event_type": 0.97,
+    "term_extraction": 0.81,
+    "overall": 0.88
+  },
+  "completeness": {
+    "core_event_detected": true,
+    "key_terms_partial": true,
+    "manual_review_recommended": true
+  },
+  "extraction_notes": "Key amendment terms were identified across the 8-K body and Exhibit 10.1. Additional agreement details may require manual review."
+}

@@ -1,0 +1,27 @@
+# DebtSignal
+
+DebtSignal is a docs-first API concept for financing and covenant event data derived from SEC 8-K filings and related exhibits.
+
+Core idea:
+- Track high-value debt events such as new financing, amendments, waivers, defaults, maturity extensions, refinancings, repayment or termination, collateral or guarantor changes, and liquidity updates.
+- Return source-linked JSON records with issuer metadata, filing metadata, event classification, extracted terms, source excerpts, confidence scores, and completeness flags.
+- Favor provenance and explicit nulls over speculative extraction.
+
+Honest v1 scope:
+- Conceptual API and docs only.
+- Intended as a source-linked monitoring and triage layer.
+- Not a legal parser, covenant compliance engine, or claim of exhaustive live extraction coverage.
+
+Machine-readable artifacts:
+- OpenAPI spec: /docs/openapi.json
+- Sample event: /docs/sample-event.json
+
+Primary endpoints:
+- GET /v1/docs/openapi.json
+- GET /v1/events
+- GET /v1/events/{event_id}
+- GET /v1/issuers/{issuer_id}/events
+- GET /v1/event-types
+
+Roadmap note:
+- x402-ready positioning is future-facing only and not live billing or access control today.

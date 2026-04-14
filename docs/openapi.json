@@ -1,0 +1,433 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DebtSignal API",
+    "version": "1.0.0-concept",
+    "summary": "Conceptual v1 API for source-linked financing and covenant event data from SEC 8-K filings and exhibits.",
+    "description": "DebtSignal is a docs-first API concept for tracking debt raises, amendments, waivers, defaults, maturity extensions, refinancings, and related financing disclosures buried in SEC 8-K filings and attached exhibits. The v1 posture is a source-linked event feed concept, not a full legal parser or covenant compliance engine."
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "servers": [
+    {
+      "url": "https://api.debtsignal.example",
+      "description": "Illustrative base URL for the conceptual v1 API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Events",
+      "description": "Financing and covenant-related event retrieval"
+    },
+    {
+      "name": "Metadata",
+      "description": "Classification vocabulary and supporting metadata"
+    }
+  ],
+  "paths": {
+    "/v1/docs/openapi.json": {
+      "get": {
+        "tags": ["Metadata"],
+        "summary": "Fetch the conceptual OpenAPI document",
+        "description": "Returns the machine-readable OpenAPI 3.1 document that describes the conceptual v1 DebtSignal endpoint surface.",
+        "responses": {
+          "200": {
+            "description": "OpenAPI document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "OpenAPI 3.1 document for the conceptual DebtSignal API.",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "List financing and covenant-related events",
+        "description": "Returns a paginated list of normalized event objects derived from SEC 8-K filings and related exhibits.",
+        "parameters": [
+          {
+            "name": "issuer",
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "cik",
+            "in": "query",
+            "schema": { "type": "string", "pattern": "^[0-9]{10}$" }
+          },
+          {
+            "name": "ticker",
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "event_type",
+            "in": "query",
+            "schema": { "$ref": "#/components/schemas/EventType" }
+          },
+          {
+            "name": "filing_date_gte",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "filing_date_lte",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "accession_number",
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "has_exhibit",
+            "in": "query",
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "min_confidence",
+            "in": "query",
+            "schema": { "type": "number", "minimum": 0, "maximum": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EventListResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events/{event_id}": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "Fetch a single event by ID",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A detailed event record",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Event" },
+                "examples": {
+                  "sample": {
+                    "summary": "Sample amendment event",
+                    "value": {
+                      "event_id": "evt_8k_0000123456_2026_04_10_001",
+                      "issuer": {
+                        "name": "Example Holdings, Inc.",
+                        "ticker": "EXH",
+                        "cik": "0000123456"
+                      },
+                      "filing": {
+                        "form": "8-K",
+                        "filed_at": "2026-04-10T20:12:00Z",
+                        "accession_number": "0000123456-26-000111",
+                        "filing_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+                        "items": ["1.01", "2.03", "8.01"]
+                      },
+                      "event_type": "amendment",
+                      "title": "Second amendment extends revolving credit facility maturity",
+                      "summary": "The issuer entered into a second amendment to its revolving credit agreement extending maturity and temporarily increasing its maximum net leverage ratio threshold.",
+                      "extracted_terms": {
+                        "facility_type": "revolving_credit_facility",
+                        "maturity_date_old": "2027-06-30",
+                        "maturity_date_new": "2029-06-30",
+                        "principal_amount_usd": 750000000,
+                        "covenant_changes": [
+                          "Maximum net leverage ratio increased for fiscal quarters ending June 30, 2026 through December 31, 2026."
+                        ],
+                        "guarantor_change": null,
+                        "default_status": null
+                      },
+                      "sources": [
+                        {
+                          "document_type": "8-K",
+                          "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+                          "excerpt": "On April 9, 2026, Example Holdings, Inc. entered into a Second Amendment to its Revolving Credit Agreement."
+                        },
+                        {
+                          "document_type": "Exhibit 10.1",
+                          "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/ex10-1.htm",
+                          "excerpt": "The Revolving Credit Maturity Date is hereby amended to June 30, 2029, and the maximum net leverage ratio shall be increased for specified 2026 quarters."
+                        }
+                      ],
+                      "confidence": {
+                        "event_type": 0.97,
+                        "term_extraction": 0.81,
+                        "overall": 0.88
+                      },
+                      "completeness": {
+                        "core_event_detected": true,
+                        "key_terms_partial": true,
+                        "manual_review_recommended": true
+                      },
+                      "extraction_notes": "Key amendment terms were identified across the 8-K body and Exhibit 10.1. Additional agreement details may require manual review."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found"
+          }
+        }
+      }
+    },
+    "/v1/issuers/{issuer_id}/events": {
+      "get": {
+        "tags": ["Events"],
+        "summary": "List financing events for one issuer",
+        "parameters": [
+          {
+            "name": "issuer_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Issuer event timeline",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EventListResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/event-types": {
+      "get": {
+        "tags": ["Metadata"],
+        "summary": "List supported event types",
+        "responses": {
+          "200": {
+            "description": "Classification vocabulary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["event_types"],
+                  "properties": {
+                    "event_types": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/EventType" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EventListResponse": {
+        "type": "object",
+        "required": ["data", "page"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Event" }
+          },
+          "page": {
+            "type": "object",
+            "required": ["next_cursor", "limit"],
+            "properties": {
+              "next_cursor": {
+                "type": ["string", "null"]
+              },
+              "limit": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "Event": {
+        "type": "object",
+        "required": [
+          "event_id",
+          "issuer",
+          "filing",
+          "event_type",
+          "title",
+          "summary",
+          "extracted_terms",
+          "sources",
+          "confidence",
+          "completeness"
+        ],
+        "properties": {
+          "event_id": {
+            "type": "string"
+          },
+          "issuer": {
+            "$ref": "#/components/schemas/Issuer"
+          },
+          "filing": {
+            "$ref": "#/components/schemas/Filing"
+          },
+          "event_type": {
+            "$ref": "#/components/schemas/EventType"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "extracted_terms": {
+            "$ref": "#/components/schemas/ExtractedTerms"
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/components/schemas/SourceDocument" }
+          },
+          "confidence": {
+            "$ref": "#/components/schemas/Confidence"
+          },
+          "completeness": {
+            "$ref": "#/components/schemas/Completeness"
+          },
+          "extraction_notes": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "Issuer": {
+        "type": "object",
+        "required": ["name", "ticker", "cik"],
+        "properties": {
+          "name": { "type": "string" },
+          "ticker": { "type": "string" },
+          "cik": { "type": "string", "pattern": "^[0-9]{10}$" }
+        }
+      },
+      "Filing": {
+        "type": "object",
+        "required": ["form", "filed_at", "accession_number", "filing_url", "items"],
+        "properties": {
+          "form": { "type": "string", "const": "8-K" },
+          "filed_at": { "type": "string", "format": "date-time" },
+          "accession_number": { "type": "string" },
+          "filing_url": { "type": "string", "format": "uri" },
+          "items": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "ExtractedTerms": {
+        "type": "object",
+        "required": [
+          "facility_type",
+          "maturity_date_old",
+          "maturity_date_new",
+          "principal_amount_usd",
+          "covenant_changes",
+          "guarantor_change",
+          "default_status"
+        ],
+        "properties": {
+          "facility_type": { "type": ["string", "null"] },
+          "maturity_date_old": { "type": ["string", "null"], "format": "date" },
+          "maturity_date_new": { "type": ["string", "null"], "format": "date" },
+          "principal_amount_usd": { "type": ["number", "null"] },
+          "covenant_changes": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "guarantor_change": { "type": ["string", "null"] },
+          "default_status": { "type": ["string", "null"] }
+        }
+      },
+      "SourceDocument": {
+        "type": "object",
+        "required": ["document_type", "source_url", "excerpt"],
+        "properties": {
+          "document_type": { "type": "string" },
+          "source_url": { "type": "string", "format": "uri" },
+          "excerpt": { "type": "string" }
+        }
+      },
+      "Confidence": {
+        "type": "object",
+        "required": ["event_type", "term_extraction", "overall"],
+        "properties": {
+          "event_type": { "type": "number", "minimum": 0, "maximum": 1 },
+          "term_extraction": { "type": "number", "minimum": 0, "maximum": 1 },
+          "overall": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      },
+      "Completeness": {
+        "type": "object",
+        "required": ["core_event_detected", "key_terms_partial", "manual_review_recommended"],
+        "properties": {
+          "core_event_detected": { "type": "boolean" },
+          "key_terms_partial": { "type": "boolean" },
+          "manual_review_recommended": { "type": "boolean" }
+        }
+      },
+      "EventType": {
+        "type": "string",
+        "enum": [
+          "new_financing",
+          "amendment",
+          "waiver",
+          "default_or_acceleration",
+          "covenant_change",
+          "maturity_extension",
+          "refinancing",
+          "repayment_or_termination",
+          "collateral_or_guarantor_change",
+          "liquidity_update"
+        ]
+      }
+    }
+  }
+}

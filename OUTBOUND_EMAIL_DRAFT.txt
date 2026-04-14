@@ -1,0 +1,61 @@
+Subject: DebtSignal launch draft — live URL to insert after verification
+
+To: team@scottyshelpers.org
+
+Hi team,
+
+The DebtSignal site and launch copy are ready pending insertion of the verified live URL.
+
+Live URL:
+[LIVE_URL]
+
+What DebtSignal is:
+DebtSignal is a docs-first API concept for financing and covenant events disclosed in SEC 8-K filings and attached exhibits. The goal is to turn messy public debt disclosures into source-linked, agent-friendly event data.
+
+Why this dataset matters:
+Debt raises, amendments, waivers, defaults, covenant changes, maturity extensions, and refinancings are meaningful events for credit investors, event-driven funds, diligence teams, and automated research workflows. The problem is that these disclosures are usually buried across 8-K text and legal exhibits, with inconsistent wording and uneven structure.
+
+What the product is promising at launch:
+- A public-data, source-linked event feed concept built around SEC filings
+- Docs-first API positioning with a minimal endpoint surface
+- Machine-friendly response shapes with provenance, confidence, and explicit nulls
+- Honest positioning around current scope and future expansion
+
+Example endpoint coverage:
+- GET /v1/events
+- GET /v1/events/{event_id}
+- GET /v1/issuers/{issuer_id}/events
+- GET /v1/event-types
+- GET /v1/docs/openapi.json
+
+Example event coverage:
+- new financing
+- amendment
+- waiver
+- default or acceleration
+- covenant change
+- maturity extension
+- refinancing
+- repayment or termination
+- collateral or guarantor change
+
+Sample response idea:
+Each event record includes issuer metadata, filing metadata, an event type, normalized extracted terms where available, source excerpts, SEC links, and confidence/completeness signals so downstream systems can automate triage while preserving a path back to the original filing.
+
+Why the positioning is credible:
+We are not claiming a full legal parser, covenant compliance engine, or live payment infrastructure. The site positions DebtSignal as a high-signal monitoring and triage layer built on public SEC disclosures.
+
+x402-ready note:
+DebtSignal is positioned as x402-ready in the future, meaning the API model is compatible with adding usage-based or agent-mediated payment flows later. This is roadmap positioning only, not a claim that billing or x402 infrastructure is already live.
+
+Important caveats:
+- Coverage is limited to publicly disclosed events in SEC filings and available exhibits.
+- Issuer disclosure quality and timing vary.
+- Some extracted terms may be partial, ambiguous, or null.
+- Human review is still appropriate for legal, underwriting, or high-stakes investment decisions.
+
+Recommended next step:
+Once the live URL is verified, replace [LIVE_URL] above and send this to team@scottyshelpers.org.
+
+Best,
+[YOUR_NAME]
