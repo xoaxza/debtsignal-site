@@ -112,10 +112,14 @@ pre {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(223, 231, 227, 0.35));
 }
 
+.section-artifacts {
+  padding-top: 4.75rem;
+  padding-bottom: 4.75rem;
+}
+
 .hero-grid,
 .sample-grid,
-.split-grid,
-.contact-shell {
+.split-grid {
   display: grid;
   gap: 2rem;
 }
@@ -154,7 +158,7 @@ h2 {
   line-height: 1;
   letter-spacing: -0.04em;
   margin-bottom: 1rem;
-  max-width: 16ch;
+  max-width: 17ch;
 }
 
 h3 {
@@ -166,14 +170,14 @@ h3 {
 .section-heading p,
 .card p,
 .endpoint p,
-.contact-card p,
 .source-item,
-.plain-list li {
+.plain-list li,
+.artifact-copy {
   color: var(--muted);
 }
 
 .hero-text {
-  max-width: 62ch;
+  max-width: 66ch;
   font-size: 1.08rem;
 }
 
@@ -207,12 +211,7 @@ h3 {
   background: rgba(255, 255, 255, 0.62);
 }
 
-.button-block {
-  width: 100%;
-}
-
-.hero-note,
-.contact-note {
+.hero-note {
   margin-top: 1rem;
   font-size: 0.94rem;
   color: var(--muted);
@@ -221,8 +220,8 @@ h3 {
 .hero-panel,
 .card,
 .code-card,
-.contact-card,
-.endpoint {
+.endpoint,
+.artifact-card {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -286,16 +285,14 @@ pre {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.two-up,
 .split-grid,
-.sample-grid,
-.contact-shell {
+.sample-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .card,
-.contact-card,
-.endpoint {
+.endpoint,
+.artifact-card {
   padding: 1.35rem;
 }
 
@@ -322,7 +319,8 @@ pre {
 }
 
 .endpoint-list,
-.sources-list {
+.sources-list,
+.artifacts-grid {
   display: grid;
   gap: 1rem;
 }
@@ -344,35 +342,48 @@ pre {
   font-size: 0.82rem;
 }
 
+.artifacts-grid,
 .sources-list {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.artifact-card,
 .source-item {
   display: block;
   text-decoration: none;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.artifact-card {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.artifact-label {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.artifact-card strong {
+  font-size: 1.02rem;
+}
+
+.source-item {
   padding: 1rem 1.1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.52);
-}
-
-.contact-section {
-  padding-bottom: 7rem;
-}
-
-.contact-card {
-  align-self: start;
 }
 
 @media (max-width: 960px) {
   .hero-grid,
   .three-up,
-  .two-up,
   .split-grid,
   .sample-grid,
-  .contact-shell,
-  .sources-list {
+  .sources-list,
+  .artifacts-grid {
     grid-template-columns: 1fr;
   }
 

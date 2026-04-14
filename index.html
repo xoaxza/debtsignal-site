@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DebtSignal | Financing and Covenant Events from SEC 8-K Filings</title>
-  <meta name="description" content="DebtSignal is a docs-first API concept for source-linked financing and covenant events extracted from SEC 8-K filings and exhibits.">
+  <title>DebtSignal | Source-Linked Debt Disclosure Events</title>
+  <meta name="description" content="DebtSignal is a docs-first API concept for source-linked financing and covenant event data from SEC 8-K filings and exhibits.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,10 +15,10 @@
       <nav class="site-nav" aria-label="Primary">
         <a href="#problem">Why it matters</a>
         <a href="#product">Product</a>
+        <a href="#principles">Schema principles</a>
+        <a href="#artifacts">Artifacts</a>
         <a href="#endpoints">Endpoints</a>
-        <a href="#sample">Sample JSON</a>
         <a href="#sources">Sources</a>
-        <a href="#contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -28,39 +28,37 @@
       <div class="container hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">Docs-first API concept for credit and agent workflows</p>
-          <h1>Financing and covenant events from SEC 8-K filings, structured for APIs, agents, and credit research.</h1>
+          <h1>Debt disclosures matter. The data is high value, legally messy, and rarely API-ready.</h1>
           <p class="hero-text">
-            DebtSignal turns messy public debt disclosures into source-linked event records. The focus in v1 is practical:
-            event detection, provenance, and enough normalized structure to triage filings faster.
+            DebtSignal is a source-linked event model for financing and covenant disclosures buried in SEC 8-K filings and exhibits.
+            The point is not to pretend legal prose is clean. The point is to return event records, provenance, and time metadata that help
+            analysts and agents triage faster without masking uncertainty.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#endpoints">Read the API docs</a>
-            <a class="button button-secondary" href="docs/sample-event.json">View sample response</a>
+            <a class="button button-primary" href="#artifacts">See machine-readable docs</a>
+            <a class="button button-secondary" href="docs/sample-event.json">View sample JSON</a>
           </div>
           <p class="hero-note">
-            Built on public SEC disclosures. Honest v1 scope: source-linked event extraction, not a full legal parser or covenant compliance engine.
+            Honest scope: docs-first API concept only. This repo does not claim a live extraction backend, exhaustive coverage, or active x402 billing.
           </p>
         </div>
         <aside class="hero-panel" aria-label="API snapshot">
-          <div class="panel-topline">Conceptual v1 response shape</div>
-          <pre><code>{
-  "event_id": "evt_8k_0000123456_2026_04_10_001",
-  "event_type": "amendment",
-  "issuer": {
-    "name": "Example Holdings, Inc.",
-    "ticker": "EXH"
+          <div class="panel-topline">Conceptual response envelope</div>
+<pre><code>{
+  "data": {
+    "event_id": "evt_8k_0000123456_2026_04_10_001",
+    "event_type": "amendment",
+    "issuer": { "ticker": "EXH" }
   },
-  "filing": {
-    "form": "8-K",
-    "items": ["1.01", "2.03", "8.01"]
-  },
-  "confidence": {
-    "overall": 0.88
+  "meta": {
+    "mode": "conceptual_docs_example",
+    "generated_at": "2026-04-14T00:00:00Z"
   }
 }</code></pre>
           <div class="panel-links">
-            <a href="docs/openapi.json">OpenAPI 3.1 spec</a>
-            <a href="docs/sample-event.json">Sample event JSON</a>
+            <a href="docs/openapi.json">OpenAPI JSON</a>
+            <a href="docs/openapi.yaml">OpenAPI YAML</a>
+            <a href="llms.txt">LLMs summary</a>
           </div>
         </aside>
       </div>
@@ -70,29 +68,29 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Why this dataset is valuable and messy</p>
-          <h2>Debt markets move on details that rarely arrive in clean tables.</h2>
+          <h2>Credit-relevant facts often hide across multiple filing layers.</h2>
           <p>
-            New term loans, revolver amendments, covenant waivers, defaults, maturity pushes, refinancings, and guarantor changes
-            can materially alter credit risk. The problem is that the underlying facts are scattered across SEC 8-K items,
-            exhibit indexes, amended credit agreements, indentures, waiver letters, and other legal attachments.
+            New facilities, amendments, waivers, defaults, guarantor changes, collateral changes, and maturity pushes can change credit risk quickly.
+            But the facts rarely arrive as a single clean record. They may start in an 8-K item, continue in an exhibit index, and only become clear inside
+            a credit agreement amendment, waiver letter, or indenture exhibit with issuer-specific language and redactions.
           </p>
         </div>
         <div class="card-grid three-up">
           <article class="card">
-            <h3>High-value workflow</h3>
-            <p>Credit investors, diligence teams, and monitoring systems care about these events quickly because they can change risk, pricing, and escalation paths.</p>
+            <h3>High signal</h3>
+            <p>These disclosures affect diligence, surveillance, pricing, escalation, and issuer timeline work. They are operationally important even when only partially extractable.</p>
           </article>
           <article class="card">
-            <h3>Source fragmentation</h3>
-            <p>Relevant terms may appear in Item 1.01, 2.03, 2.04, or 8.01, then continue inside exhibits where definitions and amendments live.</p>
+            <h3>High variance</h3>
+            <p>The same concept can appear under different SEC items, agreement definitions, amendment numbering, exhibit labels, and issuer drafting habits.</p>
           </article>
           <article class="card">
-            <h3>Operational pain</h3>
-            <p>Analysts still read long legal prose manually. Agents need explicit fields, source links, and confidence metadata rather than loose summaries.</p>
+            <h3>High verification cost</h3>
+            <p>Analysts still need the filing and exhibit trail. Agents need stable fields, explicit nulls, and provenance instead of polished but unverifiable summaries.</p>
           </article>
         </div>
         <div class="callout">
-          <p>If the choice is between overstating certainty and showing the source, show the source.</p>
+          <p>DebtSignal treats uncertainty as data: preserve source links, state time semantics, and leave ambiguous fields null.</p>
         </div>
       </div>
     </section>
@@ -101,30 +99,29 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">What DebtSignal is</p>
-          <h2>A source-linked event feed for SEC financing disclosures, designed to be useful before full legal parsing is solved.</h2>
+          <h2>A docs-first contract for source-linked debt disclosure events.</h2>
           <p>
-            DebtSignal is a docs-first API concept for detecting financing and covenant events in SEC 8-K filings and related exhibits.
-            Each event is intended to return issuer identity, filing metadata, event type, normalized terms where extractable,
-            source excerpts, filing links, and explicit confidence and completeness signals.
+            The current product posture is a compact, machine-readable schema for financing and covenant-related events from public SEC filings.
+            It is designed for monitoring, triage, prototyping, and evaluation. It is not presented here as a mature live extraction system or a substitute for source review.
           </p>
         </div>
         <div class="split-grid">
           <div class="card">
-            <h3>Who it is for</h3>
+            <h3>What the model emphasizes</h3>
             <ul class="plain-list">
-              <li>Credit and event-driven funds monitoring new debt, amendments, waivers, defaults, and maturity changes.</li>
-              <li>Diligence and private credit teams reviewing borrower disclosure history with direct filing provenance.</li>
-              <li>Fintech and AI-agent builders triggering workflows from debt-related disclosure events.</li>
-              <li>Research and data engineering teams building issuer timelines and joining event data with broader datasets.</li>
+              <li>Issuer identity, filing metadata, event classification, and normalized terms where extractable.</li>
+              <li>Provenance objects and source excerpts so humans and agents can verify the claim path.</li>
+              <li>Timeline fields that separate filing time from event effective dates and text-derived date semantics.</li>
+              <li>Consistent envelopes and explicit machine-readable errors for integration-oriented workflows.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Honest v1 scope</h3>
+            <h3>What this repo does not claim</h3>
             <ul class="plain-list">
-              <li>Docs-first conceptual API and schema.</li>
-              <li>Source-linked event objects and machine-readable docs.</li>
-              <li>Designed for monitoring and triage, not exhaustive live coverage.</li>
-              <li>Not a legal opinion engine, full covenant compliance engine, or substitute for reading the source documents.</li>
+              <li>No live production extraction backend is represented in this static site repo.</li>
+              <li>No claim of exhaustive issuer coverage, perfect term extraction, or continuous monitoring in production.</li>
+              <li>No legal parser, covenant compliance engine, or legal opinion workflow.</li>
+              <li>x402 is future-facing compatibility language only, not active billing or access control in this launch.</li>
             </ul>
           </div>
         </div>
@@ -134,22 +131,77 @@
     <section class="section" id="principles">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">Agent-friendly design principles</p>
-          <h2>Compact surface area, stable shapes, explicit uncertainty.</h2>
+          <p class="eyebrow">Agent-friendly schema principles</p>
+          <h2>Stable envelopes, provenance-first records, explicit time and error behavior.</h2>
+          <p>
+            The contract is intentionally small. Responses use predictable <code>data</code>, <code>meta</code>, and <code>page</code> envelopes so agents can parse once
+            and reuse logic across list and detail endpoints.
+          </p>
         </div>
         <div class="card-grid three-up">
           <article class="card">
-            <h3>Stable identifiers</h3>
-            <p>Every record should expose a durable <code>event_id</code> plus filing accession data to support joins, caching, and replayable workflows.</p>
+            <h3>Stable envelopes</h3>
+            <p>List responses return <code>data</code> plus <code>meta</code> and <code>page</code>. Detail responses return <code>data</code> plus <code>meta</code>. Envelope names do not change by endpoint.</p>
+          </article>
+          <article class="card">
+            <h3>Cursor pagination</h3>
+            <p><code>page.next_cursor</code> is opaque. Clients advance with the returned cursor rather than constructing offsets or inferring sort state.</p>
           </article>
           <article class="card">
             <h3>Provenance first</h3>
-            <p>Each extraction should include filing URLs, exhibit references, and excerpts so humans and agents can verify claims without guessing.</p>
+            <p>Each event carries filing references, source excerpts, exhibit metadata, and extraction notes so downstream systems can verify before acting.</p>
           </article>
           <article class="card">
-            <h3>Nulls over fiction</h3>
-            <p>Fields that are not confidently extractable should remain <code>null</code>, paired with confidence and completeness metadata instead of synthetic certainty.</p>
+            <h3>Time semantics</h3>
+            <p><code>filed_at</code> is the EDGAR filing timestamp. Event dates may be separate, nullable, and paired with precision fields when only calendar dates or narrative dates are known.</p>
           </article>
+          <article class="card">
+            <h3>Explicit nulls</h3>
+            <p>Absent or ambiguous terms stay <code>null</code>. Missing certainty is expressed through nullability, confidence, and extraction notes instead of synthetic defaults.</p>
+          </article>
+          <article class="card">
+            <h3>Machine-readable errors</h3>
+            <p><code>400</code>, <code>402</code>, <code>429</code>, and <code>503</code> use problem-detail objects with stable <code>code</code> values and retry hints where relevant.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-artifacts" id="artifacts">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Machine-readable artifacts</p>
+          <h2>Everything agents need to inspect the concept directly.</h2>
+          <p>
+            These files are static, linkable, and intentionally visible. They describe the contract and sample payloads without implying a production backend exists behind them.
+          </p>
+        </div>
+        <div class="artifacts-grid">
+          <a class="artifact-card" href="docs/openapi.json">
+            <span class="artifact-label">OpenAPI JSON</span>
+            <strong>docs/openapi.json</strong>
+            <span class="artifact-copy">Primary OpenAPI 3.1 contract with envelopes, schemas, and problem-detail responses.</span>
+          </a>
+          <a class="artifact-card" href="docs/openapi.yaml">
+            <span class="artifact-label">OpenAPI YAML</span>
+            <strong>docs/openapi.yaml</strong>
+            <span class="artifact-copy">YAML mirror of the same conceptual contract.</span>
+          </a>
+          <a class="artifact-card" href="docs/sample-event.json">
+            <span class="artifact-label">Sample Payload</span>
+            <strong>docs/sample-event.json</strong>
+            <span class="artifact-copy">Single-event response example that matches the spec and shows nulls, provenance, and time metadata.</span>
+          </a>
+          <a class="artifact-card" href="llms.txt">
+            <span class="artifact-label">LLM Summary</span>
+            <strong>llms.txt</strong>
+            <span class="artifact-copy">Short agent-readable summary of scope, endpoints, and artifacts.</span>
+          </a>
+          <a class="artifact-card" href="llms-full.txt">
+            <span class="artifact-label">LLM Full</span>
+            <strong>llms-full.txt</strong>
+            <span class="artifact-copy">Expanded machine-readable guidance covering envelopes, semantics, and constraints.</span>
+          </a>
         </div>
       </div>
     </section>
@@ -158,11 +210,13 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Minimal endpoint set</p>
-          <h2>Small enough for agents to integrate quickly, clear enough for buyers to evaluate honestly.</h2>
-          <p>Machine-readable docs are available at <a href="docs/openapi.json">docs/openapi.json</a>, with the conceptual docs endpoint surfaced as <code>GET /v1/docs/openapi.json</code>.</p>
+          <h2>Small, honest surface area for evaluation and integration planning.</h2>
+          <p>
+            The conceptual API stays narrow: list events, fetch one event, inspect event types, and discover the contract itself. The goal is integration clarity, not surface-area theater.
+          </p>
         </div>
         <div class="endpoint-callout">
-          <p>Launch surface note: the docs-first entrypoint includes a machine-readable spec endpoint so agents and evaluators can discover the schema without guessing.</p>
+          <p>Roadmap note: <code>402 Payment Required</code> is reserved in the contract for future paid access patterns, but this static launch does not implement x402 or live billing.</p>
         </div>
         <div class="endpoint-list">
           <article class="endpoint">
@@ -170,35 +224,28 @@
               <p class="endpoint-method">GET</p>
               <h3>/v1/docs/openapi.json</h3>
             </div>
-            <p>Return the conceptual OpenAPI 3.1 document for the v1 surface so buyers, developers, and agents can inspect the schema directly.</p>
+            <p>Return the conceptual OpenAPI document so buyers, developers, and agents can discover the schema without guessing.</p>
           </article>
           <article class="endpoint">
             <div>
               <p class="endpoint-method">GET</p>
               <h3>/v1/events</h3>
             </div>
-            <p>List financing and covenant-related events extracted from SEC 8-K filings with filters like issuer, ticker, event type, filing date, accession number, exhibit presence, confidence, and cursor pagination.</p>
+            <p>List financing and covenant-related events with cursor pagination, filters, provenance, and explicit metadata about time semantics and extraction posture.</p>
           </article>
           <article class="endpoint">
             <div>
               <p class="endpoint-method">GET</p>
               <h3>/v1/events/{event_id}</h3>
             </div>
-            <p>Fetch a single event with richer extraction payloads, source excerpts, exhibit references, confidence signals, and extraction notes.</p>
-          </article>
-          <article class="endpoint">
-            <div>
-              <p class="endpoint-method">GET</p>
-              <h3>/v1/issuers/{issuer_id}/events</h3>
-            </div>
-            <p>Return an issuer-specific financing disclosure timeline for monitoring, diligence, and borrower review use cases.</p>
+            <p>Fetch one source-linked event record with richer terms, provenance, confidence, extraction notes, and timeline fields.</p>
           </article>
           <article class="endpoint">
             <div>
               <p class="endpoint-method">GET</p>
               <h3>/v1/event-types</h3>
             </div>
-            <p>Expose the initial classification vocabulary: new financing, amendment, waiver, default or acceleration, covenant change, maturity extension, refinancing, repayment or termination, collateral or guarantor change, and liquidity update.</p>
+            <p>Return the supported event classification vocabulary so clients can validate filters and route workflows deterministically.</p>
           </article>
         </div>
       </div>
@@ -208,39 +255,36 @@
       <div class="container sample-grid">
         <div>
           <div class="section-heading">
-            <p class="eyebrow">Sample response</p>
-            <h2>Credible, source-linked JSON for filing triage.</h2>
+            <p class="eyebrow">Sample response posture</p>
+            <h2>Useful for triage, explicit about ambiguity.</h2>
             <p>
-              The goal in v1 is not perfect term extraction from every page of every agreement. The goal is a reliable event object with provenance,
-              normalized fields where possible, and a fast path back to the primary documents.
+              The sample payload is intentionally not overfitted to a fantasy backend. It shows the desired response shape, provenance trail, explicit nulls,
+              and the distinction between filing time and event-effective time.
             </p>
           </div>
           <p class="sample-links">
             <a href="docs/sample-event.json">Download sample JSON</a>
-            <a href="docs/openapi.json">Open OpenAPI spec</a>
+            <a href="docs/openapi.json">OpenAPI JSON</a>
+            <a href="docs/openapi.yaml">OpenAPI YAML</a>
           </p>
         </div>
         <div class="code-card">
-          <pre><code>{
-  "event_id": "evt_8k_0000123456_2026_04_10_001",
-  "event_type": "amendment",
-  "title": "Second amendment extends revolving credit facility maturity",
-  "extracted_terms": {
-    "facility_type": "revolving_credit_facility",
-    "maturity_date_old": "2027-06-30",
-    "maturity_date_new": "2029-06-30",
-    "principal_amount_usd": 750000000
-  },
-  "sources": [
-    {
-      "document_type": "8-K",
-      "source_url": "https://www.sec.gov/Archives/..."
+<pre><code>{
+  "data": {
+    "event_id": "evt_8k_0000123456_2026_04_10_001",
+    "timeline": {
+      "filed_at": "2026-04-10T20:12:00Z",
+      "effective_date": "2026-04-09",
+      "effective_date_precision": "day"
     },
-    {
-      "document_type": "Exhibit 10.1",
-      "source_url": "https://www.sec.gov/Archives/..."
+    "terms": {
+      "guarantor_change": null,
+      "waiver_period_end": null
     }
-  ]
+  },
+  "meta": {
+    "mode": "conceptual_docs_example"
+  }
 }</code></pre>
         </div>
       </div>
@@ -250,70 +294,27 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Roadmap, not live today</p>
-          <h2>x402-ready future positioning</h2>
+          <h2>Future-facing compatibility without maturity theater.</h2>
           <p>
-            DebtSignal is positioned to support usage-based or agent-mediated payment flows later without changing the core event model.
-            That is roadmap positioning only. Billing, access control, and payment flows are not live in this docs-first launch.
+            DebtSignal can describe future commercial or agent-mediated access patterns in its contract, including reserved <code>402</code> behavior.
+            That is compatibility planning only. This repo is a static documentation artifact for evaluating the event model and machine-readable interface.
           </p>
         </div>
       </div>
     </section>
 
-    <section class="section" id="limits">
-      <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Caveats and limitations</p>
-          <h2>Clear boundaries matter more than inflated claims.</h2>
-        </div>
-        <div class="card-grid two-up">
-          <article class="card">
-            <ul class="plain-list">
-              <li>Coverage is limited to publicly disclosed financing and covenant events in SEC filings and available exhibits.</li>
-              <li>Disclosure quality varies by issuer, filing timing, terminology, and redaction practices.</li>
-              <li>Some extracted terms will be partial or null because the source language is ambiguous or spread across documents.</li>
-            </ul>
-          </article>
-          <article class="card">
-            <ul class="plain-list">
-              <li>High-stakes workflows still require human review of the original filing and exhibit text.</li>
-              <li>The launch posture is docs-first and conceptual, not a claim of exhaustive live extraction coverage across all issuers.</li>
-              <li>DebtSignal is not a legal parser, covenant compliance engine, or substitute for counsel.</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="sources">
+    <section class="section" id="sources">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Primary sources</p>
-          <h2>Grounded in SEC 8-K and exhibit workflows.</h2>
-          <p>DebtSignal is built around public SEC disclosure mechanics, especially current reports and material agreement exhibits.</p>
+          <h2>Grounded in public SEC filing mechanics.</h2>
+          <p>DebtSignal is oriented around SEC 8-K current reports, exhibit workflows, and the operational reality that material debt facts are often spread across the filing package.</p>
         </div>
         <div class="sources-list">
           <a class="source-item" href="https://www.sec.gov/edgar/sec-api-documentation" target="_blank" rel="noreferrer">SEC EDGAR API documentation</a>
           <a class="source-item" href="https://www.sec.gov/developer" target="_blank" rel="noreferrer">SEC developer resources</a>
           <a class="source-item" href="https://www.sec.gov/files/form8-k.pdf" target="_blank" rel="noreferrer">SEC Form 8-K filing instructions (PDF)</a>
           <a class="source-item" href="https://www.sec.gov/Archives/edgar/data/" target="_blank" rel="noreferrer">SEC EDGAR archives filing data</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact-section" id="contact">
-      <div class="container contact-shell">
-        <div>
-          <p class="eyebrow">Early access</p>
-          <h2>Start with the filing, not the hype.</h2>
-          <p>
-            If you build for credit, diligence, or agentic research, DebtSignal offers a cleaner starting point:
-            structured financing events, source-linked evidence, and a schema designed for real workflows.
-          </p>
-        </div>
-        <div class="contact-card">
-          <p>Request early access or share feedback.</p>
-          <a class="button button-primary button-block" href="mailto:team@scottyshelpers.org?subject=DebtSignal%20early%20access">team@scottyshelpers.org</a>
-          <p class="contact-note">Docs-first launch. Feedback from funds, fintech teams, and research builders is welcome.</p>
         </div>
       </div>
     </section>

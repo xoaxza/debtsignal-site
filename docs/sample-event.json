@@ -1,52 +1,87 @@
 {
-  "event_id": "evt_8k_0000123456_2026_04_10_001",
-  "issuer": {
-    "name": "Example Holdings, Inc.",
-    "ticker": "EXH",
-    "cik": "0000123456"
-  },
-  "filing": {
-    "form": "8-K",
-    "filed_at": "2026-04-10T20:12:00Z",
-    "accession_number": "0000123456-26-000111",
-    "filing_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
-    "items": ["1.01", "2.03", "8.01"]
-  },
-  "event_type": "amendment",
-  "title": "Second amendment extends revolving credit facility maturity",
-  "summary": "The issuer entered into a second amendment to its revolving credit agreement extending maturity and temporarily increasing its maximum net leverage ratio threshold.",
-  "extracted_terms": {
-    "facility_type": "revolving_credit_facility",
-    "maturity_date_old": "2027-06-30",
-    "maturity_date_new": "2029-06-30",
-    "principal_amount_usd": 750000000,
-    "covenant_changes": [
-      "Maximum net leverage ratio increased for fiscal quarters ending June 30, 2026 through December 31, 2026."
-    ],
-    "guarantor_change": null,
-    "default_status": null
-  },
-  "sources": [
-    {
-      "document_type": "8-K",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
-      "excerpt": "On April 9, 2026, Example Holdings, Inc. entered into a Second Amendment to its Revolving Credit Agreement."
+  "data": {
+    "event_id": "evt_8k_0000123456_2026_04_10_001",
+    "event_type": "amendment",
+    "title": "Second amendment extends revolving credit facility maturity",
+    "summary": "Example Holdings, Inc. disclosed a second amendment to its revolving credit agreement that extends maturity and temporarily loosens one leverage covenant threshold. The payload is illustrative of the response model, not evidence of a live extraction backend.",
+    "issuer": {
+      "issuer_id": "iss_0000123456",
+      "name": "Example Holdings, Inc.",
+      "ticker": "EXH",
+      "cik": "0000123456"
     },
-    {
-      "document_type": "Exhibit 10.1",
-      "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/ex10-1.htm",
-      "excerpt": "The Revolving Credit Maturity Date is hereby amended to June 30, 2029, and the maximum net leverage ratio shall be increased for specified 2026 quarters."
+    "filing": {
+      "form": "8-K",
+      "accession_number": "0000123456-26-000111",
+      "filed_at": "2026-04-10T20:12:00Z",
+      "filing_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+      "items": [
+        "1.01",
+        "2.03",
+        "8.01"
+      ]
+    },
+    "timeline": {
+      "filed_at": "2026-04-10T20:12:00Z",
+      "announced_at": null,
+      "effective_date": "2026-04-09",
+      "effective_date_precision": "day"
+    },
+    "terms": {
+      "facility_type": "revolving_credit_facility",
+      "principal_amount_usd": 750000000,
+      "currency": "USD",
+      "maturity_date_old": "2027-06-30",
+      "maturity_date_new": "2029-06-30",
+      "covenant_summary": "Maximum net leverage ratio temporarily increased for specified 2026 fiscal quarters.",
+      "waiver_period_end": null,
+      "default_status": null,
+      "collateral_change": null,
+      "guarantor_change": null
+    },
+    "provenance": {
+      "has_exhibits": true,
+      "sources": [
+        {
+          "source_id": "src_8k_main",
+          "document_type": "filing",
+          "document_label": "8-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/form8-k.htm",
+          "section_reference": "Item 1.01",
+          "excerpt": "On April 9, 2026, Example Holdings, Inc. entered into a Second Amendment to its Revolving Credit Agreement."
+        },
+        {
+          "source_id": "src_ex_10_1",
+          "document_type": "exhibit",
+          "document_label": "Exhibit 10.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/123456/000012345626000111/ex10-1.htm",
+          "section_reference": "Section 1.2",
+          "excerpt": "The Revolving Credit Maturity Date is hereby amended to June 30, 2029, and the maximum net leverage ratio shall be increased for specified 2026 quarters."
+        }
+      ]
+    },
+    "confidence": {
+      "event_type": 0.97,
+      "term_extraction": 0.81,
+      "overall": 0.88
+    },
+    "completeness": {
+      "core_event_detected": true,
+      "key_terms_partial": true,
+      "manual_review_recommended": true
+    },
+    "extraction_notes": "Illustrative docs-first example. Key amendment terms appear extractable from the 8-K and Exhibit 10.1, but the full agreement should still be reviewed."
+  },
+  "meta": {
+    "request_id": null,
+    "generated_at": "2026-04-14T00:00:00Z",
+    "api_version": "1.0.0-concept",
+    "mode": "conceptual_docs_example",
+    "source_scope": "public_sec_filings_only",
+    "time_semantics": {
+      "timestamps": "RFC 3339 UTC",
+      "date_fields": "Calendar dates when only a day is disclosed; null when no reliable date can be extracted.",
+      "cursor_sort": "Descending by filing timestamp, then event_id"
     }
-  ],
-  "confidence": {
-    "event_type": 0.97,
-    "term_extraction": 0.81,
-    "overall": 0.88
-  },
-  "completeness": {
-    "core_event_detected": true,
-    "key_terms_partial": true,
-    "manual_review_recommended": true
-  },
-  "extraction_notes": "Key amendment terms were identified across the 8-K body and Exhibit 10.1. Additional agreement details may require manual review."
+  }
 }

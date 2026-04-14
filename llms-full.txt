@@ -1,0 +1,67 @@
+# DebtSignal
+
+DebtSignal is a docs-first API concept for financing and covenant-related event data derived from public SEC 8-K filings and related exhibits.
+
+## Product posture
+
+- This repo is a static site and documentation artifact.
+- It does not claim a live production extraction backend, continuous monitoring operations, or exhaustive issuer coverage.
+- The purpose is to make the event model, machine-readable contract, and response-shape principles inspectable by humans and agents.
+- x402 is future-facing only. The contract reserves `402 Payment Required` for forward compatibility, but this launch does not implement billing or access control.
+
+## Why the data is valuable and messy
+
+- Debt disclosures can materially change credit risk through amendments, waivers, defaults, new financings, guarantor changes, collateral changes, refinancings, and maturity extensions.
+- The source facts are often spread across multiple documents: 8-K items, exhibit indexes, credit agreement amendments, waiver letters, and other attachments.
+- Issuer language varies. Not every term is extractable with high confidence from the filing package alone.
+- Because of that, provenance, timeline metadata, confidence, and explicit nulls matter more than polished summaries.
+
+## Response-shape principles
+
+- Stable envelopes:
+  - List endpoints return `data`, `meta`, and `page`.
+  - Detail endpoints return `data` and `meta`.
+- Cursor pagination:
+  - `page.next_cursor` is opaque.
+  - Clients should not infer offsets or ordering from the cursor contents.
+- Provenance:
+  - Events include filing references, exhibit identifiers where relevant, source URLs, source excerpts, and extraction notes.
+- Time semantics:
+  - Filing timestamps are RFC 3339 UTC timestamps.
+  - Event-effective dates may be date-only values and may be null.
+  - Date precision is explicit so clients know whether a field came from a full timestamp, a calendar date, or ambiguous narrative text.
+- Explicit nulls:
+  - Unknown or weakly supported terms remain `null`.
+  - Nulls are preferred over guessed values.
+- Machine-readable errors:
+  - `400`, `402`, `429`, and `503` return problem-detail objects with stable `code` values and optional retry metadata.
+
+## Machine-readable artifacts
+
+- `/docs/openapi.json` - primary OpenAPI 3.1 contract
+- `/docs/openapi.yaml` - YAML mirror of the same contract
+- `/docs/sample-event.json` - sample detail response matching the contract
+- `/llms.txt` - short summary
+- `/llms-full.txt` - expanded summary
+
+## Conceptual endpoint surface
+
+- `GET /v1/docs/openapi.json`
+  - Returns the conceptual contract.
+- `GET /v1/events`
+  - Lists financing and covenant-related event records with filters and cursor pagination.
+- `GET /v1/events/{event_id}`
+  - Returns one source-linked event record.
+- `GET /v1/event-types`
+  - Returns the supported classification vocabulary.
+
+## Event record highlights
+
+- Durable `event_id`
+- Issuer identity: `issuer_id`, issuer name, ticker, CIK
+- Filing metadata: form, accession number, filing URL, filing items
+- Timeline metadata: filed time, announced/effective dates, date precision
+- Terms: normalized debt-related fields where extractable, otherwise `null`
+- Provenance: source documents and excerpts
+- Confidence and completeness indicators
+- Extraction notes for human review

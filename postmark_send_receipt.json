@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "status_code": 200,
+  "data": {
+    "ErrorCode": 0,
+    "Message": "OK",
+    "MessageID": "863836c4-113a-451a-b4fb-9ef346990772",
+    "SubmittedAt": "2026-04-14T18:11:17.0195314Z",
+    "To": "team@scottyshelpers.org"
+  },
+  "mode": "send",
+  "payload_summary": {
+    "From": "team@scottyshelpers.org",
+    "To": "team@scottyshelpers.org",
+    "Subject": "DebtSignal site is live: source-linked SEC debt event API concept",
+    "MessageStream": "outbound"
+  }
+}
